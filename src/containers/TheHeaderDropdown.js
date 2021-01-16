@@ -8,8 +8,12 @@ import {
   CImg
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { useHistory } from "react-router-dom";
 
 const TheHeaderDropdown = () => {
+  const history = useHistory();
+
+  
   return (
     <CDropdown
       inNav
@@ -32,7 +36,7 @@ const TheHeaderDropdown = () => {
           color="light"
           className="text-center"
         >
-          <strong>Account</strong>
+          <strong>Meus dados</strong>
         </CDropdownItem>
         <CDropdownItem>
           <CIcon name="cil-bell" className="mfe-2" />
@@ -59,10 +63,12 @@ const TheHeaderDropdown = () => {
           tag="div"
           color="light"
           className="text-center"
+          style={{cursor: "pointer"}}
+          onClick={() => history.push("/")}
         >
-          <strong>Settings</strong>
+          <strong style={{cursor: "pointer"}}>Sair</strong>
         </CDropdownItem>
-        <CDropdownItem>
+        {/* <CDropdownItem>
           <CIcon name="cil-user" className="mfe-2" />Profile
         </CDropdownItem>
         <CDropdownItem>
@@ -83,7 +89,7 @@ const TheHeaderDropdown = () => {
         <CDropdownItem>
           <CIcon name="cil-lock-locked" className="mfe-2" />
           Lock Account
-        </CDropdownItem>
+        </CDropdownItem> */}
       </CDropdownMenu>
     </CDropdown>
   )

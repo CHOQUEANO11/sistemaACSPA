@@ -1,5 +1,5 @@
-import React from 'react'
-// import { Link } from 'react-router-dom'
+import React, {Background} from 'react'
+import { Link } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -26,15 +26,15 @@ const Login = () => {
               <CCard className="p-4">
                 <CCardBody>
                   <CForm>
-                    <h1>Login</h1>
-                    <p className="text-muted">Sign In to your account</p>
+                    <h1 style={{textAlign: 'center'}}>Login</h1>
+                    <p className="text-muted">Digite seus dados para prosseguir</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
                         <CInputGroupText>
                           <CIcon name="cil-user" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="text" placeholder="Username" autoComplete="username" />
+                      <CInput type="email" placeholder="Digite seu email" autoComplete="email" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
@@ -42,14 +42,17 @@ const Login = () => {
                           <CIcon name="cil-lock-locked" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="password" placeholder="Password" autoComplete="current-password" />
+                      <CInput type="password" placeholder="Digite sua senha" autoComplete="current-password" />
                     </CInputGroup>
                     <CRow>
+
                       <CCol xs="6">
-                        <CButton color="primary" className="px-4">Login</CButton>
+                      <Link to="/home">
+                        <CButton color="primary" className="px-4">Entrar</CButton>
+                        </Link>
                       </CCol>
                       <CCol xs="6" className="text-right">
-                        <CButton color="link" className="px-0">Forgot password?</CButton>
+                        <CButton color="link" className="px-0">Esqueceu a senha?</CButton>
                       </CCol>
                     </CRow>
                   </CForm>

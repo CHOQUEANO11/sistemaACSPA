@@ -2,19 +2,16 @@ import React, { lazy } from 'react'
 import {
   CBadge,
   CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
   CProgress,
   CRow,
   CCallout
 } from '@coreui/react'
+import Carousel from '../base/carousels/Carousels.js'
 import CIcon from '@coreui/icons-react'
-
-import MainChartExample from '../charts/MainChartExample.js'
 
 const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
 const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
@@ -22,8 +19,9 @@ const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 const Dashboard = () => {
   return (
     <>
+    <Carousel />
       <WidgetsDropdown />
-      <CCard>
+      {/* <CCard>
         <CCardBody>
           <CRow>
             <CCol sm="5">
@@ -105,7 +103,7 @@ const Dashboard = () => {
             </CCol>
           </CRow>
         </CCardFooter>
-      </CCard>
+      </CCard> */}
 
       <WidgetsBrand withCharts/>
 

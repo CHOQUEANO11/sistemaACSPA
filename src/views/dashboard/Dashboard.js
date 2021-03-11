@@ -19,8 +19,8 @@ const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 const Dashboard = () => {
   return (
     <>
-    <Carousel />
-      <WidgetsDropdown />
+    <Carousel /> 
+      <WidgetsDropdown /> 
       {/* <CCard>
         <CCardBody>
           <CRow>

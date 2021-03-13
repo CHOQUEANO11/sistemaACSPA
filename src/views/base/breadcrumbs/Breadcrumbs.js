@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   CButton,
   CCard,
@@ -13,7 +13,7 @@ import {
   CRow,
 } from "@coreui/react";
 import { useFormik } from "formik";
-// import firebase from '../../../services/firebase'
+import firebase from '../../../services/firebase'
 const validate = (values) => {
   const errors = {};
   if (!values.nome) {
@@ -145,7 +145,10 @@ const Breadcrumbs = () => {
     },
     validate,
     onSubmit: (values) => {
+      const data = firebase.firestore().collection("user");
+      const result = data.add(values);
       alert(JSON.stringify(values, null, 2));
+      console.log(result);
     },
   });
   return (
@@ -441,7 +444,7 @@ const Breadcrumbs = () => {
                                   <option value="9">SUB TENENTE</option>
                                   <option value="10">1º SARGENTO</option>
                                   <option value="11">2º SARGENTO</option>
-                                  <option value="12">3º SARGENTO</option>º
+                                  <option value="12">3º SARGENTO</option>
                                   <option value="13">CABO</option>
                                   <option value="14">SOLDADO</option>
                                   <option value="15">ALUNO SOLDADO</option>

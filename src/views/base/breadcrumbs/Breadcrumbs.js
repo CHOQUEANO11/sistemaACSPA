@@ -145,7 +145,7 @@ const Breadcrumbs = () => {
     },
     validate,
     onSubmit: (values) => {
-      const data = firebase.firestore().collection("user");
+      const data = firebase.firestore().collection("users");
       const result = data.add(values);
       alert(JSON.stringify(values, null, 2));
       console.log(result);

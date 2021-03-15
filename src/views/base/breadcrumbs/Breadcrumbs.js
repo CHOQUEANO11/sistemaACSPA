@@ -99,7 +99,7 @@ const validate = (values) => {
   return errors;
 };
 export default function Breadcrumbs() {
-  const [nome, setNome] = useState("");
+  // const [nome, setNome] = useState("");
   // const [email, setEmail] = useState('');
   // const [rg, setRg] = useState('');
   // const [cpf, setCpf] = useState('');
@@ -122,9 +122,7 @@ export default function Breadcrumbs() {
   // const [crg, setCrg] = useState('');
   // const [status, setStatus] = useState('');
   const [show, setShow] = useState(false);
-  function clear() {
-    setNome("");
-  }
+
   const formik = useFormik({
     initialValues: {
       nome: "",
@@ -152,9 +150,9 @@ export default function Breadcrumbs() {
     },
     validate,
     onSubmit: (values) => {
-      // const data = firebase.firestore().collection("users");
-      // const result = data.add(values);
-      // console.log(result);
+      const data = firebase.firestore().collection("users");
+      const result = data.add(values);
+      console.log(result);
       alert(JSON.stringify(values, null, 2));
 
       formik.resetForm();

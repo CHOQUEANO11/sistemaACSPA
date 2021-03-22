@@ -11,12 +11,12 @@ import {
   CSelect,
   CInputFile,
   CRow,
+  CDataTable,
 } from "@coreui/react";
 
 import { useFormik } from "formik";
-import firebase from "../../../services/firebase";
-import Carousels from "../carousels/Carousels";
-
+import firebase from "../../../../services/firebase";
+import Carousels from "../../carousels/Carousels";
 const validate = (values) => {
   const errors = {};
   if (!values.nome) {
@@ -98,98 +98,40 @@ const validate = (values) => {
   }
   return errors;
 };
-export default function Breadcrumbs() {
-  // const [nome, setNome] = useState("");
-  // const [email, setEmail] = useState('');
-  // const [rg, setRg] = useState('');
-  // const [cpf, setCpf] = useState('');
-  // const [nasc, setNasc] = useState('');
-  // const [natur, setNatur] = useState('');
-  // const [end, setEnd] = useState('');
-  // const [bairro, setBairro] = useState('');
-  // const [munic, setMunic] = useState('');
-  // const [cep, setCep] = useState('');
-  // const [tel, setTel] = useState('');
-  // const [cel, setCel] = useState('');
-  // const [pai, setPai] = useState('');
-  // const [mae, setMae] = useState('');
-  // const [posto, setPosto] = useState('');
-  // const [orgao, setOrgao] = useState('');
-  // const [funcional, setFuncional] = useState('');
-  // const [matricula, setMatricula] = useState('');
-  // const [inclusao, setInclusao] = useState('');
-  // const [cheque, setCheque] = useState('');
-  // const [crg, setCrg] = useState('');
-  // const [status, setStatus] = useState('');
+function FormEdit({ info }) {
   const [show, setShow] = useState(false);
-  const [dataList, setDataList] = useState({});
+  const [infoPerson, setInfoPerson] = useState(info);
 
-  useEffect(() => {
-    const ts = [];
-    firebase
-      .firestore()
-      .collection("users")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          // console.log(doc.id, " => ", doc.data());
-          ts.push(doc.data());
-        });
-      });
-    setDataList(
-      ts.length === 0
-        ? setTimeout(() => {
-            setDataList(ts);
-          }, 2000)
-        : ts
-    );
-    // firebase. child("").on("value", (snapshot) => {
-    //   if (snapshot.val() !== null) {
-    //     setDataList({ ...snapshot.val() });
-    //   }
-    // });
-  }, []);
-
-  function onFileChange(e) {
-    const file = e.target.files[0];
-    const storageRef = firebase.storage().ref();
-    const fileRef = storageRef.child(file.name);
-    fileRef.put(file).then(() => {
-      console.log("uploaded file", file.name);
-    });
-  }
   const formik = useFormik({
     initialValues: {
-      nome: "",
-      email: "",
-      rg: "",
-      cpf: "",
-      data: "",
-      naturalidade: "",
-      endereço: "",
-      bairro: "",
-      municipio: "",
-      cep: "",
-      tel: "",
-      cel: "",
-      pai: "",
-      mae: "",
-      grad: "",
-      orgao: "",
-      situacao: "",
-      matricula: "",
-      inclusao: "",
-      atuacao: "",
+      nome: infoPerson.nome,
+      email: infoPerson.email,
+      rg: infoPerson.rg,
+      cpf: infoPerson.cpf,
+      data: infoPerson.data,
+      naturalidade: infoPerson.naturalidade,
+      endereço: infoPerson.endereço,
+      bairro: infoPerson.bairro,
+      municipio: infoPerson.municipio,
+      cep: infoPerson.cep,
+      tel: infoPerson.tel,
+      cel: infoPerson.cel,
+      pai: infoPerson.pai,
+      mae: infoPerson.mae,
+      grad: infoPerson.grad,
+      orgao: infoPerson.orgao,
+      situacao: infoPerson.situacao,
+      matricula: infoPerson.matricula,
+      inclusao: infoPerson.inclusao,
+      atuacao: infoPerson.atuacao,
       contracheque: "",
       rgMilitar: "",
-      status: "ATIVO",
     },
     validate,
     onSubmit: (values) => {
-      const data = firebase.firestore().collection("users");
-      const result = data.add(values);
-      console.log(result);
+      // const data = firebase.firestore().collection("users");
+      // const result = data.add(values);
+      // console.log(result);
       alert(JSON.stringify(values, null, 2));
 
       formik.resetForm();
@@ -204,30 +146,15 @@ export default function Breadcrumbs() {
           <CCol xl="12">
             <CCard>
               <CCardHeader style={{ fontSize: 20, textAlign: "center" }}>
-                Formulário de Inclusão
+                Formulário de Reinclusão
               </CCardHeader>
               <CCardBody>
                 <div id="accordion">
                   <form onSubmit={formik.handleSubmit}>
                     <CCard className="mb-0">
-                      {/* <CCardHeader id="headingOne">
-                  <CButton 
-                    block 
-                    color="link" 
-                    className="text-left m-0 p-0" 
-                    onClick={() => setAccordion(accordion === 0 ? null : 0)}
-                  >
-                    <h5 style={{textAlign: 'center'}} className="m-0 p-0">Formulário de inclusão</h5>
-                  </CButton>
-                </CCardHeader> */}
-                      {/* <CCollapse show={accordion === 0}> */}
                       <CCardBody>
                         <CCol xs="12" sm="12">
                           <CCard>
-                            {/* <CCardHeader>
-              Company
-              <small> Form</small>
-            </CCardHeader> */}
                             <CCardBody>
                               <CFormGroup>
                                 <CLabel htmlFor="name">NOME</CLabel>
@@ -626,7 +553,7 @@ export default function Breadcrumbs() {
                                   </CFormGroup>
                                 </CCol>
                                 <CCol xs="4"></CCol>
-                                {/* <CFormGroup> */}
+
                                 <CCol xs="4">
                                   <CFormGroup>
                                     <CLabel col htmlFor="file-input">
@@ -643,7 +570,7 @@ export default function Breadcrumbs() {
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>
-                                {/* </CFormGroup> */}
+
                                 <CCol xs="4"></CCol>
                                 <CCol xs="4"></CCol>
 
@@ -655,7 +582,6 @@ export default function Breadcrumbs() {
                                     <CInputFile
                                       id="rgMilitar"
                                       name="rgMilitar"
-                                      type="file"
                                       onChange={formik.handleChange}
                                       value={formik.values.rgMilitar}
                                     />
@@ -667,71 +593,20 @@ export default function Breadcrumbs() {
                               </CFormGroup>
                               <CFormGroup row className="my-2">
                                 <CCol className="mb-6 mb-xl-0 text-center">
-                                  {/* <CLabel htmlFor="text"></CLabel> */}
-                                  {/* <CFormGroup> */}
                                   <CButton
                                     type="submit"
                                     style={{ marginTop: 20 }}
                                     color="success"
                                   >
-                                    Salvar formulário
+                                    Reincluir a Associação
                                   </CButton>
-                                  {/* </CFormGroup> */}
                                 </CCol>
-                                {/* <CCol xs="6" className="mb-6 mb-xl-0 text-center">
-                           
-                            <CButton color="primary">atualizar dados</CButton>
-                          
-                          </CCol> */}
                               </CFormGroup>
                             </CCardBody>
                           </CCard>
                         </CCol>
                       </CCardBody>
-                      {/* </CCollapse> */}
                     </CCard>
-                    {/* <CCard className="mb-0">
-                <CCardHeader id="headingTwo">
-                  <CButton 
-                    block 
-                    color="link" 
-                    className="text-left m-0 p-0" 
-                    onClick={() => setAccordion(accordion === 1 ? null : 1)}
-                  >
-                    <h5 style={{textAlign: 'center'}} className="m-0 p-0">Formulário de desligamento</h5>
-                  </CButton>
-                </CCardHeader>
-                <CCollapse show={accordion === 0}>
-                  <CCardBody>
-                    2. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non
-                    cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird
-                    on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred
-                    nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                    beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven''t heard of them accusamus labore sustainable VHS.
-                  </CCardBody>
-                </CCollapse>
-              </CCard> */}
-                    {/* <CCard className="mb-0">
-                <CCardHeader id="headingThree">
-                  <CButton 
-                    block 
-                    color="link" 
-                    className="text-left m-0 p-0" 
-                    onClick={() => setAccordion(accordion === 2 ? null : 2)}
-                  >
-                    <h5 style={{textAlign: 'center'}} className="m-0 p-0">Formulário de reinclusão</h5>
-                  </CButton>
-                </CCardHeader>
-                <CCollapse show={accordion === 2}>
-                  <CCardBody>
-                    3. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non
-                    cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird
-                    on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred
-                    nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft
-                    beer farm-to-table, raw denim aesthetic synth nesciunt you probably havent heard of them accusamus labore sustainable VHS.
-                  </CCardBody>
-                </CCollapse>
-              </CCard> */}
                   </form>
                 </div>
               </CCardBody>
@@ -746,3 +621,5 @@ export default function Breadcrumbs() {
     </div>
   );
 }
+
+export default FormEdit;

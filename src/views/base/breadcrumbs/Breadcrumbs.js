@@ -655,7 +655,7 @@ export default function Breadcrumbs() {
                                       id="rgMilitar"
                                       name="rgMilitar"
                                       type="file"
-                                      onChange={onFileChange}
+                                      onChange={formik.handleChange}
                                       value={formik.values.rgMilitar}
                                     />
                                     {formik.errors.rgMilitar ? (

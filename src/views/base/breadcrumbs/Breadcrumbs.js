@@ -190,7 +190,6 @@ export default function Breadcrumbs() {
       const data = firebase.firestore().collection("users");
       const result = data.add(values);
       console.log(result);
-      alert(JSON.stringify(values, null, 2));
 
       formik.resetForm();
 
@@ -656,7 +655,7 @@ export default function Breadcrumbs() {
                                       id="rgMilitar"
                                       name="rgMilitar"
                                       type="file"
-                                      onChange={formik.handleChange}
+                                      onChange={onFileChange}
                                       value={formik.values.rgMilitar}
                                     />
                                     {formik.errors.rgMilitar ? (

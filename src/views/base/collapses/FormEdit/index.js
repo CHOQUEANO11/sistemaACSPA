@@ -13,10 +13,12 @@ import {
   CRow,
   CDataTable,
 } from "@coreui/react";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import firebase from "../../../../services/firebase";
 import Carousels from "../../carousels/Carousels";
+import Collapses from "../Collapses";
 const validate = (values) => {
   const errors = {};
   if (!values.nome) {
@@ -126,16 +128,22 @@ function FormEdit({ info }) {
       atuacao: infoPerson.atuacao,
       contracheque: "",
       rgMilitar: "",
+      status: "ATIVO",
     },
     validate,
     onSubmit: (values) => {
-      // const data = firebase.firestore().collection("users");
-      // const result = data.add(values);
-      // console.log(result);
-      alert(JSON.stringify(values, null, 2));
-
-      formik.resetForm();
-
+      try {
+        firebase.firestore().collection("users").doc(infoPerson.id).set(values);
+        toast.success("Militar reincluido com sucesso");
+        formik.resetForm();
+        setTimeout(() => {
+          setShow(true);
+        }, 1000);
+      } catch {
+        toast.error(
+          "Ocorreu um erro, verifique sua internet e tente novamente"
+        );
+      }
       // setShow(true);
     },
   });
@@ -615,7 +623,7 @@ function FormEdit({ info }) {
         </CRow>
       ) : (
         <div>
-          <Carousels />
+          <Collapses />
         </div>
       )}
     </div>

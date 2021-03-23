@@ -4,28 +4,6 @@ import firebase from "../../../services/firebase";
 import FormEdit from "./FormEdit";
 
 export default function Collapses() {
-  // const [nome, setNome] = useState("");
-  // const [email, setEmail] = useState('');
-  // const [rg, setRg] = useState('');
-  // const [cpf, setCpf] = useState('');
-  // const [nasc, setNasc] = useState('');
-  // const [natur, setNatur] = useState('');
-  // const [end, setEnd] = useState('');
-  // const [bairro, setBairro] = useState('');
-  // const [munic, setMunic] = useState('');
-  // const [cep, setCep] = useState('');
-  // const [tel, setTel] = useState('');
-  // const [cel, setCel] = useState('');
-  // const [pai, setPai] = useState('');
-  // const [mae, setMae] = useState('');
-  // const [posto, setPosto] = useState('');
-  // const [orgao, setOrgao] = useState('');
-  // const [funcional, setFuncional] = useState('');
-  // const [matricula, setMatricula] = useState('');
-  // const [inclusao, setInclusao] = useState('');
-  // const [cheque, setCheque] = useState('');
-  // const [crg, setCrg] = useState('');
-  // const [status, setStatus] = useState('');
   const [show, setShow] = useState(false);
   const [dataList, setDataList] = useState([]);
   const [infoPerson, setInfoPerson] = useState({});
@@ -46,34 +24,34 @@ export default function Collapses() {
           ts.push(user);
         });
       });
-    setDataList(
-      ts.map((item) => ({
-        id: item.id,
-        nome: item.dados.nome,
-        email: item.dados.email,
-        rg: item.dados.rg,
-        cpf: item.dados.cpf,
-        data: item.dados.data,
-        naturalidade: item.dados.naturalidade,
-        endereço: item.dados.endereço,
-        bairro: item.dados.bairro,
-        municipio: item.dados.municipio,
-        cep: item.dados.cep,
-        tel: item.dados.tel,
-        cel: item.dados.cel,
-        pai: item.dados.pai,
-        mae: item.dados.mae,
-        grad: item.dados.grad,
-        orgao: item.dados.orgao,
-        situacao: item.dados.situacao,
-        matricula: item.dados.matricula,
-        inclusao: item.dados.inclusao,
-        atuacao: item.dados.atuacao,
-        contracheque: item.dados.contracheque,
-        rgMilitar: item.dados.rgMilitar,
-        status: item.dados.status,
-      }))
-    );
+
+    const ref = ts.map((item) => ({
+      id: item.id,
+      nome: item.dados.nome,
+      email: item.dados.email,
+      rg: item.dados.rg,
+      cpf: item.dados.cpf,
+      data: item.dados.data,
+      naturalidade: item.dados.naturalidade,
+      endereço: item.dados.endereço,
+      bairro: item.dados.bairro,
+      municipio: item.dados.municipio,
+      cep: item.dados.cep,
+      tel: item.dados.tel,
+      cel: item.dados.cel,
+      pai: item.dados.pai,
+      mae: item.dados.mae,
+      grad: item.dados.grad,
+      orgao: item.dados.orgao,
+      situacao: item.dados.situacao,
+      matricula: item.dados.matricula,
+      inclusao: item.dados.inclusao,
+      atuacao: item.dados.atuacao,
+      contracheque: item.dados.contracheque,
+      rgMilitar: item.dados.rgMilitar,
+      status: item.dados.status,
+    }));
+    setDataList(ref.filter((item) => item.status === "INATIVO"));
   }
   useEffect(() => {
     teste();

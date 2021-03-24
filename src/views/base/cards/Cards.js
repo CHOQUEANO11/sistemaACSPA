@@ -44,6 +44,8 @@ export default function Cards() {
         atuacao: infoPerson.atuacao,
         contracheque: infoPerson.contracheque,
         rgMilitar: infoPerson.rgMilitar,
+        sede: infoPerson.sede,
+        dependente: infoPerson.dependente,
         status: "INATIVO",
       });
 
@@ -100,6 +102,8 @@ export default function Cards() {
       contracheque: item.dados.contracheque,
       rgMilitar: item.dados.rgMilitar,
       status: item.dados.status,
+      sede: item.dados.sede,
+      dependente: item.dados.dependente,
     }));
     setDataList(ref.filter((item) => item.status === "ATIVO"));
   }

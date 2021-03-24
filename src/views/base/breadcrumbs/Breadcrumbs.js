@@ -12,7 +12,7 @@ import {
   CSelect,
 } from "@coreui/react";
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import firebase from "../../../services/firebase";
@@ -123,29 +123,10 @@ export default function Breadcrumbs() {
   // const [dataList, setDataList] = useState({});
   const [fileRGUrl, setFileRGUrl] = useState(null);
   const [fileCCUrl, setFileCCUrl] = useState(null);
-
-  // useEffect(() => {
-  //   const ts = [];
-  //   firebase
-  //     .firestore()
-  //     .collection("users")
-  //     .get()
-  //     .then((querySnapshot) => {
-  //       querySnapshot.forEach((doc) => {
-  //         // doc.data() is never undefined for query doc snapshots
-  //         // console.log(doc.id, " => ", doc.data());
-  //         ts.push(doc.data());
-  //       });
-  //     });
-  //   setDataList(
-  //     ts.length === 0
-  //       ? setTimeout(() => {
-  //           setDataList(ts);
-  //         }, 2000)
-  //       : ts
-  //   );
-
-  // }, []);
+  const [namedep, setNameDep] = useState(null);
+  const [cpfDep, setCpfDep] = useState(null);
+  const [dependentList, setDependentList] = useState([]);
+  const [info, setInfo] = useState("");
 
   async function onFileChange(e) {
     const file = e.target.files[0];
@@ -161,6 +142,22 @@ export default function Breadcrumbs() {
     await fileRef.put(file);
     setFileCCUrl(await fileRef.getDownloadURL());
   }
+
+  function removeCustom() {
+    let ts = dependentList;
+    let ta = ts.splice(ts.indexOf(info.nome), 1);
+    if (info !== "") {
+      setDependentList(ts);
+    } else {
+      setTimeout(() => {
+        setDependentList(ts);
+      }, 1000);
+    }
+  }
+  // useEffect(() => {
+
+  // }, [info]);
+
   const formik = useFormik({
     initialValues: {
       nome: "",
@@ -212,6 +209,7 @@ export default function Breadcrumbs() {
           inclusao: values.inclusao,
           atuacao: values.atuacao,
           sede: values.sede,
+          dependente: dependentList,
           contracheque: fileCCUrl,
           rgMilitar: fileRGUrl,
           status: "ATIVO",
@@ -226,6 +224,7 @@ export default function Breadcrumbs() {
       // setShow(true);
     },
   });
+
   return (
     <div>
       {show === false ? (
@@ -658,6 +657,98 @@ export default function Breadcrumbs() {
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="date">
+                                      {" "}
+                                      NOME DO DEPENDENTE
+                                    </CLabel>
+                                    <CInput
+                                      id="nomedep"
+                                      name="nomedep"
+                                      type="text"
+                                      placeholder="digite o nome do dependente"
+                                      onChange={(e) =>
+                                        setNameDep(e.target.value)
+                                      }
+                                      value={namedep}
+                                    />{" "}
+                                  </CFormGroup>
+                                </CCol>{" "}
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="date">
+                                      {" "}
+                                      CPF DO DEPENDENTE
+                                    </CLabel>
+                                    <CInput
+                                      id="nomedep"
+                                      name="nomedep"
+                                      type="number"
+                                      inputMode="numeric"
+                                      placeholder="digite o CPF do dependente"
+                                      onChange={(e) =>
+                                        setCpfDep(e.target.value)
+                                      }
+                                      value={cpfDep}
+                                    />{" "}
+                                  </CFormGroup>
+                                </CCol>
+                                <CCol xs="4">
+                                  <CButton
+                                    color="success"
+                                    style={{
+                                      width: 100,
+                                      marginTop: 10,
+                                      marginLeft: 10,
+                                    }}
+                                    onClick={() => {
+                                      setDependentList([
+                                        ...dependentList,
+                                        {
+                                          nome: namedep,
+                                          cpf: cpfDep,
+                                        },
+                                      ]);
+                                    }}
+                                  >
+                                    {" "}
+                                    Adicionar
+                                  </CButton>{" "}
+                                </CCol>
+                                {dependentList.length !== 0 ? (
+                                  <CCol>
+                                    <CLabel htmlFor="date"> DEPENDENTES</CLabel>
+                                    {dependentList.map((item) => {
+                                      const info = item;
+                                      return (
+                                        <>
+                                          <CFormGroup>
+                                            <p>
+                                              NOME: {item.nome} CPF: {item.cpf}{" "}
+                                            </p>
+                                          </CFormGroup>
+                                          <CFormGroup>
+                                            <CButton
+                                              color="danger"
+                                              style={{ width: 100 }}
+                                              onClick={() => {
+                                                setInfo(info);
+                                                removeCustom();
+                                              }}
+                                            >
+                                              {" "}
+                                              Remover
+                                            </CButton>
+                                          </CFormGroup>
+                                        </>
+                                      );
+                                    })}
+                                  </CCol>
+                                ) : (
+                                  <CCol xs="4"></CCol>
+                                )}
+                                <CCol xs="4"></CCol> <CCol xs="4"></CCol>
                                 {/* <CFormGroup> */}
                                 <CCol xs="4">
                                   <CFormGroup>
@@ -702,9 +793,7 @@ export default function Breadcrumbs() {
                                   <CCol xs="4"></CCol>
                                 )}
                                 {/* </CFormGroup> */}
-
                                 <CCol xs="4"></CCol>
-
                                 <CCol xs="4">
                                   <CFormGroup>
                                     <CLabel col md="6" htmlFor="file-input">
@@ -759,11 +848,6 @@ export default function Breadcrumbs() {
                                   </CButton>
                                   {/* </CFormGroup> */}
                                 </CCol>
-                                {/* <CCol xs="6" className="mb-6 mb-xl-0 text-center">
-                           
-                            <CButton color="primary">atualizar dados</CButton>
-                          
-                          </CCol> */}
                               </CFormGroup>
                             </CCardBody>
                           </CCard>

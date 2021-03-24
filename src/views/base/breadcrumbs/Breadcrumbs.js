@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
 import {
   CButton,
   CCard,
   CCardBody,
   CCardHeader,
-  CFormGroup,
   CCol,
+  CFormGroup,
   CInput,
-  CLabel,
-  CSelect,
   CInputFile,
+  CLabel,
   CRow,
+  CSelect,
 } from "@coreui/react";
-
 import { useFormik } from "formik";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import firebase from "../../../services/firebase";
 import Carousels from "../carousels/Carousels";
 
@@ -88,16 +89,13 @@ const validate = (values) => {
   if (!values.atuacao) {
     errors.atuacao = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
   }
-  if (!values.contracheque) {
-    errors.contracheque = (
-      <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>
-    );
+  if (!values.sede) {
+    errors.sede = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
   }
-  if (!values.rgMilitar) {
-    errors.rgMilitar = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
-  }
+
   return errors;
 };
+
 export default function Breadcrumbs() {
   // const [nome, setNome] = useState("");
   // const [email, setEmail] = useState('');
@@ -122,42 +120,46 @@ export default function Breadcrumbs() {
   // const [crg, setCrg] = useState('');
   // const [status, setStatus] = useState('');
   const [show, setShow] = useState(false);
-  const [dataList, setDataList] = useState({});
+  // const [dataList, setDataList] = useState({});
+  const [fileRGUrl, setFileRGUrl] = useState(null);
+  const [fileCCUrl, setFileCCUrl] = useState(null);
 
-  useEffect(() => {
-    const ts = [];
-    firebase
-      .firestore()
-      .collection("users")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          // console.log(doc.id, " => ", doc.data());
-          ts.push(doc.data());
-        });
-      });
-    setDataList(
-      ts.length === 0
-        ? setTimeout(() => {
-            setDataList(ts);
-          }, 2000)
-        : ts
-    );
-    // firebase. child("").on("value", (snapshot) => {
-    //   if (snapshot.val() !== null) {
-    //     setDataList({ ...snapshot.val() });
-    //   }
-    // });
-  }, []);
+  // useEffect(() => {
+  //   const ts = [];
+  //   firebase
+  //     .firestore()
+  //     .collection("users")
+  //     .get()
+  //     .then((querySnapshot) => {
+  //       querySnapshot.forEach((doc) => {
+  //         // doc.data() is never undefined for query doc snapshots
+  //         // console.log(doc.id, " => ", doc.data());
+  //         ts.push(doc.data());
+  //       });
+  //     });
+  //   setDataList(
+  //     ts.length === 0
+  //       ? setTimeout(() => {
+  //           setDataList(ts);
+  //         }, 2000)
+  //       : ts
+  //   );
 
-  function onFileChange(e) {
+  // }, []);
+
+  async function onFileChange(e) {
     const file = e.target.files[0];
     const storageRef = firebase.storage().ref();
     const fileRef = storageRef.child(file.name);
-    fileRef.put(file).then(() => {
-      console.log("uploaded file", file.name);
-    });
+    await fileRef.put(file);
+    setFileRGUrl(await fileRef.getDownloadURL());
+  }
+  async function onFileChange1(e) {
+    const file = e.target.files[0];
+    const storageRef = firebase.storage().ref();
+    const fileRef = storageRef.child(file.name);
+    await fileRef.put(file);
+    setFileCCUrl(await fileRef.getDownloadURL());
   }
   const formik = useFormik({
     initialValues: {
@@ -181,18 +183,46 @@ export default function Breadcrumbs() {
       matricula: "",
       inclusao: "",
       atuacao: "",
-      contracheque: "",
-      rgMilitar: "",
+      sede: "",
       status: "ATIVO",
     },
     validate,
     onSubmit: (values) => {
-      const data = firebase.firestore().collection("users");
-      const result = data.add(values);
-      console.log(result);
+      if (fileRGUrl !== null && fileCCUrl !== null) {
+        const data = firebase.firestore().collection("users");
+        data.add({
+          nome: values.nome,
+          email: values.email,
+          rg: values.rg,
+          cpf: values.cpf,
+          data: values.data,
+          naturalidade: values.naturalidade,
+          endereço: values.endereço,
+          bairro: values.bairro,
+          municipio: values.municipio,
+          cep: values.cep,
+          tel: values.tel,
+          cel: values.cel,
+          pai: values.pai,
+          mae: values.mae,
+          grad: values.grad,
+          orgao: values.orgao,
+          situacao: values.situacao,
+          matricula: values.matricula,
+          inclusao: values.inclusao,
+          atuacao: values.atuacao,
+          sede: values.sede,
+          contracheque: fileCCUrl,
+          rgMilitar: fileRGUrl,
+          status: "ATIVO",
+        });
 
-      formik.resetForm();
-
+        toast.success("Militar foi Inserido com sucesso");
+        formik.resetForm();
+        setShow(true);
+      } else {
+        toast.error("Insira a cópia do ContraCheque ou RG Militar ");
+      }
       // setShow(true);
     },
   });
@@ -209,24 +239,9 @@ export default function Breadcrumbs() {
                 <div id="accordion">
                   <form onSubmit={formik.handleSubmit}>
                     <CCard className="mb-0">
-                      {/* <CCardHeader id="headingOne">
-                  <CButton 
-                    block 
-                    color="link" 
-                    className="text-left m-0 p-0" 
-                    onClick={() => setAccordion(accordion === 0 ? null : 0)}
-                  >
-                    <h5 style={{textAlign: 'center'}} className="m-0 p-0">Formulário de inclusão</h5>
-                  </CButton>
-                </CCardHeader> */}
-                      {/* <CCollapse show={accordion === 0}> */}
                       <CCardBody>
                         <CCol xs="12" sm="12">
                           <CCard>
-                            {/* <CCardHeader>
-              Company
-              <small> Form</small>
-            </CCardHeader> */}
                             <CCardBody>
                               <CFormGroup>
                                 <CLabel htmlFor="name">NOME</CLabel>
@@ -624,7 +639,25 @@ export default function Breadcrumbs() {
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>
-                                <CCol xs="4"></CCol>
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="name">SEDE</CLabel>
+                                    <CSelect
+                                      custom
+                                      name="sede"
+                                      id="sede"
+                                      onChange={formik.handleChange}
+                                      value={formik.values.sede}
+                                    >
+                                      <option value="0">Selecionar</option>
+                                      <option value="BELÉM">BELÉM</option>
+                                      <option value="TUCURUÍ">TUCURUÍ</option>
+                                    </CSelect>
+                                    {formik.errors.sede ? (
+                                      <div>{formik.errors.sede}</div>
+                                    ) : null}
+                                  </CFormGroup>
+                                </CCol>
                                 {/* <CFormGroup> */}
                                 <CCol xs="4">
                                   <CFormGroup>
@@ -634,16 +667,42 @@ export default function Breadcrumbs() {
                                     <CInputFile
                                       id="contracheque"
                                       name="contracheque"
-                                      onChange={formik.handleChange}
-                                      value={formik.values.contracheque}
+                                      type="file"
+                                      onChange={onFileChange1}
                                     />
-                                    {formik.errors.contracheque ? (
-                                      <div>{formik.errors.contracheque}</div>
+                                    {fileCCUrl === null ? (
+                                      <div>
+                                        {" "}
+                                        <p style={{ color: "red" }}>
+                                          Preencha esse campo
+                                        </p>
+                                      </div>
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>
+                                {fileCCUrl !== null ? (
+                                  <CCol xs="4">
+                                    <CFormGroup>
+                                      {/* <CLabel htmlFor="file-input">
+                                      Visualizar Contracheque
+                                    </CLabel> */}
+                                      <CButton
+                                        color="success"
+                                        style={{ width: 200, marginTop: 10 }}
+                                        onClick={() => {
+                                          window.open(fileCCUrl, "_blank");
+                                        }}
+                                      >
+                                        {" "}
+                                        Visualizar Contracheque
+                                      </CButton>
+                                    </CFormGroup>
+                                  </CCol>
+                                ) : (
+                                  <CCol xs="4"></CCol>
+                                )}
                                 {/* </CFormGroup> */}
-                                <CCol xs="4"></CCol>
+
                                 <CCol xs="4"></CCol>
 
                                 <CCol xs="4">
@@ -655,14 +714,37 @@ export default function Breadcrumbs() {
                                       id="rgMilitar"
                                       name="rgMilitar"
                                       type="file"
-                                      onChange={formik.handleChange}
-                                      value={formik.values.rgMilitar}
+                                      onChange={onFileChange}
                                     />
-                                    {formik.errors.rgMilitar ? (
-                                      <div>{formik.errors.rgMilitar}</div>
+                                    {fileRGUrl === null ? (
+                                      <div>
+                                        {" "}
+                                        <p style={{ color: "red" }}>
+                                          Preencha esse campo
+                                        </p>
+                                      </div>
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>
+                                {fileRGUrl !== null ? (
+                                  <CCol xs="4">
+                                    <CFormGroup>
+                                      {/* <CLabel htmlFor="file-input">
+                                      Visualizar RG
+                                    </CLabel> */}
+                                      <CButton
+                                        color="success"
+                                        style={{ width: 200, marginTop: 10 }}
+                                        onClick={() => {
+                                          window.open(fileRGUrl, "_blank");
+                                        }}
+                                      >
+                                        {" "}
+                                        Visualizar RG Militar
+                                      </CButton>
+                                    </CFormGroup>
+                                  </CCol>
+                                ) : null}
                               </CFormGroup>
                               <CFormGroup row className="my-2">
                                 <CCol className="mb-6 mb-xl-0 text-center">
@@ -670,8 +752,8 @@ export default function Breadcrumbs() {
                                   {/* <CFormGroup> */}
                                   <CButton
                                     type="submit"
-                                    style={{ marginTop: 20 }}
-                                    color="success"
+                                    style={{ marginTop: 20, width: 200 }}
+                                    color="primary"
                                   >
                                     Salvar formulário
                                   </CButton>

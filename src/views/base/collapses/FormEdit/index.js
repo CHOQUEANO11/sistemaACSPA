@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from "react";
 import {
   CButton,
   CCard,
   CCardBody,
   CCardHeader,
-  CFormGroup,
   CCol,
+  CFormGroup,
   CInput,
-  CLabel,
-  CSelect,
   CInputFile,
+  CLabel,
   CRow,
-  CDataTable,
+  CSelect,
 } from "@coreui/react";
+import { useFormik } from "formik";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useFormik } from "formik";
 import firebase from "../../../../services/firebase";
-import Carousels from "../../carousels/Carousels";
 import Collapses from "../Collapses";
 const validate = (values) => {
   const errors = {};
@@ -90,19 +88,32 @@ const validate = (values) => {
   if (!values.atuacao) {
     errors.atuacao = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
   }
-  if (!values.contracheque) {
-    errors.contracheque = (
-      <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>
-    );
+  if (!values.sede) {
+    errors.sede = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
   }
-  if (!values.rgMilitar) {
-    errors.rgMilitar = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
-  }
+
   return errors;
 };
 function FormEdit({ info }) {
   const [show, setShow] = useState(false);
-  const [infoPerson, setInfoPerson] = useState(info);
+  const [infoPerson] = useState(info);
+  const [fileRGUrl, setFileRGUrl] = useState(info.rgMilitar);
+  const [fileCCUrl, setFileCCUrl] = useState(info.contracheque);
+
+  async function onFileChange(e) {
+    const file = e.target.files[0];
+    const storageRef = firebase.storage().ref();
+    const fileRef = storageRef.child(file.name);
+    await fileRef.put(file);
+    setFileRGUrl(await fileRef.getDownloadURL());
+  }
+  async function onFileChange1(e) {
+    const file = e.target.files[0];
+    const storageRef = firebase.storage().ref();
+    const fileRef = storageRef.child(file.name);
+    await fileRef.put(file);
+    setFileCCUrl(await fileRef.getDownloadURL());
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -126,14 +137,38 @@ function FormEdit({ info }) {
       matricula: infoPerson.matricula,
       inclusao: infoPerson.inclusao,
       atuacao: infoPerson.atuacao,
-      contracheque: "",
-      rgMilitar: "",
+      sede: infoPerson.sede,
       status: "ATIVO",
     },
     validate,
     onSubmit: (values) => {
       try {
-        firebase.firestore().collection("users").doc(infoPerson.id).set(values);
+        firebase.firestore().collection("users").doc(infoPerson.id).set({
+          nome: values.nome,
+          email: values.email,
+          rg: values.rg,
+          cpf: values.cpf,
+          data: values.data,
+          naturalidade: values.naturalidade,
+          endereço: values.endereço,
+          bairro: values.bairro,
+          municipio: values.municipio,
+          cep: values.cep,
+          tel: values.tel,
+          cel: values.cel,
+          pai: values.pai,
+          mae: values.mae,
+          grad: values.grad,
+          orgao: values.orgao,
+          situacao: values.situacao,
+          matricula: values.matricula,
+          inclusao: values.inclusao,
+          atuacao: values.atuacao,
+          sede: values.sede,
+          contracheque: fileCCUrl,
+          rgMilitar: fileRGUrl,
+          status: "ATIVO",
+        });
         toast.success("Militar reincluido com sucesso");
         formik.resetForm();
         setTimeout(() => {
@@ -560,42 +595,101 @@ function FormEdit({ info }) {
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>
-                                <CCol xs="4"></CCol>
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="name">SEDE</CLabel>
+                                    <CSelect
+                                      custom
+                                      name="sede"
+                                      id="sede"
+                                      onChange={formik.handleChange}
+                                      value={formik.values.sede}
+                                    >
+                                      <option value="0">Selecionar</option>
+                                      <option value="BELÉM">BELÉM</option>
+                                      <option value="TUCURUÍ">TUCURUÍ</option>
+                                    </CSelect>
+                                    {formik.errors.sede ? (
+                                      <div>{formik.errors.sede}</div>
+                                    ) : null}
+                                  </CFormGroup>
+                                </CCol>
 
                                 <CCol xs="4">
                                   <CFormGroup>
-                                    <CLabel col htmlFor="file-input">
+                                    <CLabel htmlFor="file-input">
                                       CONTRACHEQUE
                                     </CLabel>
                                     <CInputFile
                                       id="contracheque"
                                       name="contracheque"
-                                      onChange={formik.handleChange}
-                                      value={formik.values.contracheque}
+                                      onChange={onFileChange1}
                                     />
-                                    {formik.errors.contracheque ? (
-                                      <div>{formik.errors.contracheque}</div>
+                                    {fileCCUrl === null ? (
+                                      <div>
+                                        {" "}
+                                        <p style={{ color: "red" }}>
+                                          Preencha esse campo
+                                        </p>
+                                      </div>
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>
 
-                                <CCol xs="4"></CCol>
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    {/* <CLabel htmlFor="file-input">
+                                      Visualizar Contracheque
+                                    </CLabel> */}
+                                    <CButton
+                                      color="success"
+                                      style={{ width: 200, marginTop: 10 }}
+                                      onClick={() => {
+                                        window.open(fileCCUrl, "_blank");
+                                      }}
+                                    >
+                                      {" "}
+                                      Visualizar Contracheque
+                                    </CButton>
+                                  </CFormGroup>
+                                </CCol>
                                 <CCol xs="4"></CCol>
 
                                 <CCol xs="4">
                                   <CFormGroup>
-                                    <CLabel col md="6" htmlFor="file-input">
+                                    <CLabel htmlFor="file-input">
                                       RG MILITAR
                                     </CLabel>
                                     <CInputFile
                                       id="rgMilitar"
                                       name="rgMilitar"
-                                      onChange={formik.handleChange}
-                                      value={formik.values.rgMilitar}
+                                      onChange={onFileChange}
                                     />
-                                    {formik.errors.rgMilitar ? (
-                                      <div>{formik.errors.rgMilitar}</div>
+                                    {fileRGUrl === null ? (
+                                      <div>
+                                        {" "}
+                                        <p style={{ color: "red" }}>
+                                          Preencha esse campo
+                                        </p>
+                                      </div>
                                     ) : null}
+                                  </CFormGroup>
+                                </CCol>
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    {/* <CLabel htmlFor="file-input">
+                                      Visualizar RG
+                                    </CLabel> */}
+                                    <CButton
+                                      color="success"
+                                      style={{ width: 200, marginTop: 10 }}
+                                      onClick={() => {
+                                        window.open(fileRGUrl, "_blank");
+                                      }}
+                                    >
+                                      {" "}
+                                      Visualizar RG Militar
+                                    </CButton>
                                   </CFormGroup>
                                 </CCol>
                               </CFormGroup>
@@ -603,12 +697,12 @@ function FormEdit({ info }) {
                                 <CCol className="mb-6 mb-xl-0 text-center">
                                   <CButton
                                     type="submit"
-                                    style={{ marginTop: 20 }}
-                                    color="success"
+                                    style={{ marginTop: 20, width: 200 }}
+                                    color="primary"
                                   >
                                     Reincluir a Associação
                                   </CButton>
-                                </CCol>
+                                </CCol>{" "}
                               </CFormGroup>
                             </CCardBody>
                           </CCard>

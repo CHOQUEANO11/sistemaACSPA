@@ -7,7 +7,6 @@ import {
   CModal,
   CModalFooter,
   CModalHeader,
-  CModalBody,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import firebase from "../../../services/firebase";
@@ -43,8 +42,8 @@ export default function Cards() {
         matricula: infoPerson.matricula,
         inclusao: infoPerson.inclusao,
         atuacao: infoPerson.atuacao,
-        // contracheque: infoPerson.contracheque,
-        // rgMilitar: infoPerson.rgMilitar,
+        contracheque: infoPerson.contracheque,
+        rgMilitar: infoPerson.rgMilitar,
         status: "INATIVO",
       });
 

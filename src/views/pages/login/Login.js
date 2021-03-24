@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, {useState} from 'react'
+import { useHistory } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -15,8 +15,28 @@ import {
   CRow
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import firebase from '../../../services/firebase'
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const history = useHistory()
+
+
+  function handleSubmit(){
+    firebase.auth().signInWithEmailAndPassword(email, password)
+  .then((user) => {
+    console.log('USER', user)
+    // eslint-disable-next-line no-unused-expressions
+    history.push('/home')
+  })
+  .catch((error) => {
+    console.log("ERROR", error)
+  });
+  }
+
+
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>
@@ -34,7 +54,13 @@ const Login = () => {
                           <CIcon name="cil-user" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="email" placeholder="Digite seu email" autoComplete="email" />
+                      <CInput  
+                      type="email" 
+                      placeholder="Digite seu email" 
+                      autoComplete="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      value={email}
+                       />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
@@ -42,14 +68,18 @@ const Login = () => {
                           <CIcon name="cil-lock-locked" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="password" placeholder="Digite sua senha" autoComplete="current-password" />
+                      <CInput 
+                      type="password" 
+                      placeholder="Digite sua senha" 
+                      autoComplete="current-password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      value={password}
+                       />
                     </CInputGroup>
                     <CRow>
 
                       <CCol xs="6">
-                      <Link to="/home">
-                        <CButton color="primary" className="px-4">Entrar</CButton>
-                        </Link>
+                        <CButton onClick={handleSubmit} color="primary" className="px-4">Entrar</CButton>
                       </CCol>
                       <CCol xs="6" className="text-right">
                         <CButton color="link" className="px-0">Esqueceu a senha?</CButton>

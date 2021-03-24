@@ -1,13 +1,13 @@
 import React from 'react'
 import {
-  CButton,
+  // CButton,
   CCard,
-  CCardBody,
+  // CCardBody,
   CCardHeader,
   CCol,
   CRow
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+// import CIcon from '@coreui/icons-react'
 
 const BrandButtons = () => {
   return (
@@ -15,9 +15,9 @@ const BrandButtons = () => {
       <CCol xs="12">
         <CCard>
           <CCardHeader>
-            Brand button
+            Em contrução
           </CCardHeader>
-          <CCardBody>
+          {/* <CCardBody>
             <h6>Size Small
               <small> <code>size="sm"</code></small>
             </h6>
@@ -82,11 +82,11 @@ const BrandButtons = () => {
               <CButton size="lg" className="btn-reddit btn-brand mr-1 mb-1"><CIcon size="lg" name="cib-reddit" /><span className="mfs-2">Reddit</span></CButton>
               <CButton size="lg" className="btn-vimeo btn-brand mr-1 mb-1"><CIcon size="lg" name="cib-vimeo" /><span className="mfs-2">Vimeo</span></CButton>
             </p>
-          </CCardBody>
+          </CCardBody> */}
         </CCard>
       </CCol>
 
-      <CCol xs="12">
+      {/* <CCol xs="12">
         <CCard>
           <CCardHeader>
             Brand button
@@ -159,7 +159,7 @@ const BrandButtons = () => {
             </p>
           </CCardBody>
         </CCard>
-      </CCol>
+      </CCol> */}
     </CRow>
   )
 }

@@ -7,7 +7,7 @@ import {
   CModal,
   CModalFooter,
   CModalHeader,
-  CModalBody,
+  // CModalBody,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import firebase from "../../../services/firebase";

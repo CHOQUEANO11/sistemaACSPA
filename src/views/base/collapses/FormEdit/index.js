@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   CButton,
   CCard,
@@ -11,13 +11,13 @@ import {
   CSelect,
   CInputFile,
   CRow,
-  CDataTable,
+  // CDataTable,
 } from "@coreui/react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import firebase from "../../../../services/firebase";
-import Carousels from "../../carousels/Carousels";
+// import Carousels from "../../carousels/Carousels";
 import Collapses from "../Collapses";
 const validate = (values) => {
   const errors = {};
@@ -102,7 +102,7 @@ const validate = (values) => {
 };
 function FormEdit({ info }) {
   const [show, setShow] = useState(false);
-  const [infoPerson, setInfoPerson] = useState(info);
+  const [infoPerson] = useState(info);
 
   const formik = useFormik({
     initialValues: {

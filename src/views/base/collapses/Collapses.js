@@ -4,7 +4,7 @@ import firebase from "../../../services/firebase";
 import FormEdit from "./FormEdit";
 
 export default function Collapses() {
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
   const [dataList, setDataList] = useState([]);
   const [infoPerson, setInfoPerson] = useState({});
   const [showForm, setShowForm] = useState(false);

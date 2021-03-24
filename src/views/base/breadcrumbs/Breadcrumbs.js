@@ -121,8 +121,8 @@ export default function Breadcrumbs() {
   // const [cheque, setCheque] = useState('');
   // const [crg, setCrg] = useState('');
   // const [status, setStatus] = useState('');
-  const [show, setShow] = useState(false);
-  const [dataList, setDataList] = useState({});
+  const [show] = useState(false);
+  const [setDataList] = useState({});
 
   useEffect(() => {
     const ts = [];
@@ -149,6 +149,7 @@ export default function Breadcrumbs() {
     //     setDataList({ ...snapshot.val() });
     //   }
     // });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function onFileChange(e) {
@@ -159,6 +160,7 @@ export default function Breadcrumbs() {
       console.log("uploaded file", file.name);
     });
   }
+
   const formik = useFormik({
     initialValues: {
       nome: "",
@@ -634,7 +636,7 @@ export default function Breadcrumbs() {
                                     <CInputFile
                                       id="contracheque"
                                       name="contracheque"
-                                      onChange={formik.handleChange}
+                                      onChange={onFileChange}
                                       value={formik.values.contracheque}
                                     />
                                     {formik.errors.contracheque ? (

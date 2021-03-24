@@ -1,24 +1,24 @@
 import React from 'react'
 import {
-  CButton,
+  // CButton,
   CCard,
-  CCardBody,
+  // CCardBody,
   CCardHeader,
-  CCol,
-  CRow
+  // CCol,
+  // CRow
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { DocsLink } from 'src/reusable'
+// import CIcon from '@coreui/icons-react'
+// import { DocsLink } from 'src/reusable'
 
 const Buttons = () => {
   return (
     <>
       <CCard>
         <CCardHeader>
-          Standard Buttons
-          <DocsLink name="-Button"/>
+          Em Construção
+          {/* <DocsLink name="-Button"/> */}
         </CCardHeader>
-        <CCardBody>
+        {/* <CCardBody>
           <CRow className="align-items-center">
             <CCol col="12" xl className="mb-3 mb-xl-0">
               Normal
@@ -115,9 +115,9 @@ const Buttons = () => {
               <CButton block color="link" disabled>Link</CButton>
             </CCol>
           </CRow>
-        </CCardBody>
+        </CCardBody> */}
       </CCard>
-      <CCard>
+      {/* <CCard>
         <CCardHeader>
           variant="outline" Buttons
         </CCardHeader>
@@ -668,7 +668,7 @@ const Buttons = () => {
             </CCardBody>
           </CCard>
         </CCol>
-      </CRow>
+      </CRow> */}
     </>
   )
 }

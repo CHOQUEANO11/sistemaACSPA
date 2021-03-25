@@ -16,6 +16,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import firebase from '../../../services/firebase'
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -30,8 +31,10 @@ const Login = () => {
     console.log('USER', user)
     // eslint-disable-next-line no-unused-expressions
     history.push('/home')
+    toast.success(`Seja bem vindo(@), ${email}`);
   })
   .catch((error) => {
+    toast.error("Desculpe, você não é um ADMINISTRADOR!");
     console.log("ERROR", error)
   });
   }

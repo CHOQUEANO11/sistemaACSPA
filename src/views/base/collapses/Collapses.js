@@ -53,6 +53,7 @@ export default function Collapses() {
     }));
     setDataList(ref.filter((item) => item.status === "INATIVO"));
   }
+
   useEffect(() => {
     teste();
   }, []);

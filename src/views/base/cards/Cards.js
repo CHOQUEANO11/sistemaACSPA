@@ -43,8 +43,8 @@ export default function Cards() {
         matricula: infoPerson.matricula,
         inclusao: infoPerson.inclusao,
         atuacao: infoPerson.atuacao,
-        // contracheque: infoPerson.contracheque,
-        // rgMilitar: infoPerson.rgMilitar,
+        contracheque: infoPerson.contracheque,
+        rgMilitar: infoPerson.rgMilitar,
         status: "INATIVO",
       });
 

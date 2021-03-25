@@ -10,6 +10,7 @@ import {
   CInputFile,
   CLabel,
   CRow,
+  CSelect
   // CDataTable,
 } from "@coreui/react";
 import { useFormik } from "formik";
@@ -98,6 +99,38 @@ const validate = (values) => {
 function FormEdit({ info }) {
   const [show, setShow] = useState(false);
   const [infoPerson] = useState(info);
+  const [fileRGUrl, setFileRGUrl] = useState(info.rgMilitar);
+  const [fileCCUrl, setFileCCUrl] = useState(info.contracheque);
+  const [namedep, setNameDep] = useState(null);
+  const [cpfDep, setCpfDep] = useState(null);
+  const [dependentList, setDependentList] = useState(info.dependentes);
+  const [info1, setInfo1] = useState("");
+
+  function removeCustom() {
+    let ts = dependentList;
+    // let ta = ts.splice(ts.indexOf(info1.nome), 1);
+    if (info1 !== "") {
+      setDependentList(ts);
+    } else {
+      setTimeout(() => {
+        setDependentList(ts);
+      }, 1000);
+    }
+  }
+  async function onFileChange(e) {
+    const file = e.target.files[0];
+    const storageRef = firebase.storage().ref();
+    const fileRef = storageRef.child(file.name);
+    await fileRef.put(file);
+    setFileRGUrl(await fileRef.getDownloadURL());
+  }
+  async function onFileChange1(e) {
+    const file = e.target.files[0];
+    const storageRef = firebase.storage().ref();
+    const fileRef = storageRef.child(file.name);
+    await fileRef.put(file);
+    setFileCCUrl(await fileRef.getDownloadURL());
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -122,6 +155,7 @@ function FormEdit({ info }) {
       inclusao: infoPerson.inclusao,
       atuacao: infoPerson.atuacao,
       sede: infoPerson.sede,
+
       status: "ATIVO",
     },
     validate,
@@ -149,6 +183,7 @@ function FormEdit({ info }) {
           inclusao: values.inclusao,
           atuacao: values.atuacao,
           sede: values.sede,
+          dependente: dependentList,
           contracheque: fileCCUrl,
           rgMilitar: fileRGUrl,
           status: "ATIVO",
@@ -598,7 +633,98 @@ function FormEdit({ info }) {
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>
-
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="date">
+                                      {" "}
+                                      NOME DO DEPENDENTE
+                                    </CLabel>
+                                    <CInput
+                                      id="nomedep"
+                                      name="nomedep"
+                                      type="text"
+                                      placeholder="digite o nome do dependente"
+                                      onChange={(e) =>
+                                        setNameDep(e.target.value)
+                                      }
+                                      value={namedep}
+                                    />{" "}
+                                  </CFormGroup>
+                                </CCol>{" "}
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="date">
+                                      {" "}
+                                      CPF DO DEPENDENTE
+                                    </CLabel>
+                                    <CInput
+                                      id="nomedep"
+                                      name="nomedep"
+                                      type="number"
+                                      inputMode="numeric"
+                                      placeholder="digite o CPF do dependente"
+                                      onChange={(e) =>
+                                        setCpfDep(e.target.value)
+                                      }
+                                      value={cpfDep}
+                                    />{" "}
+                                  </CFormGroup>
+                                </CCol>
+                                <CCol xs="4">
+                                  <CButton
+                                    color="success"
+                                    style={{
+                                      width: 100,
+                                      marginTop: 10,
+                                      marginLeft: 10,
+                                    }}
+                                    onClick={() => {
+                                      setDependentList([
+                                        ...dependentList,
+                                        {
+                                          nome: namedep,
+                                          cpf: cpfDep,
+                                        },
+                                      ]);
+                                    }}
+                                  >
+                                    {" "}
+                                    Adicionar
+                                  </CButton>{" "}
+                                </CCol>
+                                {dependentList.length !== 0 ? (
+                                  <CCol>
+                                    <CLabel htmlFor="date"> DEPENDENTES</CLabel>
+                                    {dependentList.map((item) => {
+                                      const info = item;
+                                      return (
+                                        <>
+                                          <CFormGroup>
+                                            <p>
+                                              NOME: {item.nome} CPF: {item.cpf}{" "}
+                                            </p>
+                                          </CFormGroup>
+                                          <CFormGroup>
+                                            <CButton
+                                              color="danger"
+                                              style={{ width: 100 }}
+                                              onClick={() => {
+                                                setInfo1(info);
+                                                removeCustom();
+                                              }}
+                                            >
+                                              {" "}
+                                              Remover
+                                            </CButton>
+                                          </CFormGroup>
+                                        </>
+                                      );
+                                    })}
+                                  </CCol>
+                                ) : (
+                                  <CCol xs="4"></CCol>
+                                )}{" "}
+                                <CCol xs="4"></CCol> <CCol xs="4"></CCol>
                                 <CCol xs="4">
                                   <CFormGroup>
                                     <CLabel htmlFor="file-input">
@@ -619,7 +745,6 @@ function FormEdit({ info }) {
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>
-
                                 <CCol xs="4">
                                   <CFormGroup>
                                     {/* <CLabel htmlFor="file-input">
@@ -638,7 +763,6 @@ function FormEdit({ info }) {
                                   </CFormGroup>
                                 </CCol>
                                 <CCol xs="4"></CCol>
-
                                 <CCol xs="4">
                                   <CFormGroup>
                                     <CLabel htmlFor="file-input">

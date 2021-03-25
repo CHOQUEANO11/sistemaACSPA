@@ -2,213 +2,308 @@ import React from 'react'
 import {
   CCard,
   CCardBody,
-  CCardGroup,
-  CCardHeader
+  // CCardGroup,
+  CCardHeader,
+  CButton,
+  // CCard,
+  // CCardBody,
+  // CCardHeader,
+  CCol,
+  CFormGroup,
+  CInput,
+  // CInputFile,
+  CLabel,
+  CRow,
+  CSelect,
 } from '@coreui/react'
-import {
-  CChartBar,
-  CChartLine,
-  CChartDoughnut,
-  CChartRadar,
-  CChartPie,
-  CChartPolarArea
-} from '@coreui/react-chartjs'
-import { DocsLink } from 'src/reusable'
+import { useFormik } from "formik";
+import firebase from "../../services/firebase";
+import { toast } from "react-toastify";
+
+const validate = (values) => {
+  const errors = {};
+  if (!values.nome) {
+    errors.nome = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
+  }
+
+  if (!values.email) {
+    errors.email = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = "Insira um Email Válido";
+  }
+
+  if (!values.rg) {
+    errors.rg = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
+  }
+
+  if (!values.cpf) {
+    errors.cpf = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
+  }
+
+  if (!values.password) {
+    errors.password = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
+  } else if (values.password.length < 6) {
+    errors.password = <p style={{ color: "red" }}>A senha deve conter 6 ou mais caracteres!</p>;
+  }
+
+  if (!values.status) {
+    errors.status = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
+  }
+
+  if (!values.sede) {
+    errors.sede = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
+  } else if (values.sede.length > 20) {
+    errors.sede = "Must be 20 characters or less";
+  }
+  return errors;
+};
 
 const Charts = () => {
 
+
+  const formik = useFormik({
+    initialValues: {
+      nome: "",
+      email: "",
+      rg: "",
+      cpf: "",
+      sede: "",
+      password: "",
+      status: ""
+    },
+    validate,
+    onSubmit: (values) =>  {
+      if (values) {
+        const data =  firebase.firestore().collection("admin");
+        data.add({
+          nome: values.nome,
+          email: values.email,
+          rg: values.rg,
+          cpf: values.cpf,
+          sede: values.sede,
+          // password: values.password,
+          status: values.status,
+        });
+        datas()
+
+        toast.success("Militar foi Inserido com sucesso");
+        formik.resetForm();
+        // setShow(true);
+      } else {
+        toast.error("Insira a cópia do ContraCheque ou RG Militar ");
+      }
+      // setShow(true);
+    },
+  });
+
+  const datas = () => {
+    const email = formik.values.email
+    const password = formik.values.password
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then((user) => {
+      console.log("DADOS", user)
+    // Signed in
+    // ...
+      })
+    .catch((error) => {
+    console.log('errado', error);
+    // ..
+    });
+  }
+
   return (
-    <CCardGroup columns className = "cols-2" >
-      <CCard>
-        <CCardHeader>
-          Bar Chart
-          <DocsLink href="http://www.chartjs.org"/>
-        </CCardHeader>
-        <CCardBody>
-          <CChartBar
-            datasets={[
-              {
-                label: 'GitHub Commits',
-                backgroundColor: '#f87979',
-                data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-              }
-            ]}
-            labels="months"
-            options={{
-              tooltips: {
-                enabled: true
-              }
-            }}
-          />
-        </CCardBody>
-      </CCard>
-
-      <CCard>
-        <CCardHeader>
-          Doughnut Chart
-        </CCardHeader>
-        <CCardBody>
-          <CChartDoughnut
-            datasets={[
-              {
-                backgroundColor: [
-                  '#41B883',
-                  '#E46651',
-                  '#00D8FF',
-                  '#DD1B16'
-                ],
-                data: [40, 20, 80, 10]
-              }
-            ]}
-            labels={['VueJs', 'EmberJs', 'ReactJs', 'AngularJs']}
-            options={{
-              tooltips: {
-                enabled: true
-              }
-            }}
-          />
-        </CCardBody>
-      </CCard>
-
-      <CCard>
-        <CCardHeader>
-          Line Chart
-        </CCardHeader>
-        <CCardBody>
-          <CChartLine
-            datasets={[
-              {
-                label: 'Data One',
-                backgroundColor: 'rgb(228,102,81,0.9)',
-                data: [30, 39, 10, 50, 30, 70, 35]
-              },
-              {
-                label: 'Data Two',
-                backgroundColor: 'rgb(0,216,255,0.9)',
-                data: [39, 80, 40, 35, 40, 20, 45]
-              }
-            ]}
-            options={{
-              tooltips: {
-                enabled: true
-              }
-            }}
-            labels="months"
-          />
-        </CCardBody>
-      </CCard>
-
-      <CCard>
-        <CCardHeader>
-          Pie Chart
-        </CCardHeader>
-        <CCardBody>
-          <CChartPie
-            datasets={[
-              {
-                backgroundColor: [
-                  '#41B883',
-                  '#E46651',
-                  '#00D8FF',
-                  '#DD1B16'
-                ],
-                data: [40, 20, 80, 10]
-              }
-            ]}
-            labels={['VueJs', 'EmberJs', 'ReactJs', 'AngularJs']}
-            options={{
-              tooltips: {
-                enabled: true
-              }
-            }}
-          />
-        </CCardBody>
-      </CCard>
-
-      <CCard>
-        <CCardHeader>
-          Polar Area Chart
-        </CCardHeader>
-        <CCardBody>
-          <CChartPolarArea
-            datasets={[
-              {
-                label: 'My First dataset',
-                backgroundColor: 'rgba(179,181,198,0.2)',
-                pointBackgroundColor: 'rgba(179,181,198,1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: 'rgba(179,181,198,1)',
-                pointHoverBorderColor: 'rgba(179,181,198,1)',
-                data: [65, 59, 90, 81, 56, 55, 40]
-              },
-              {
-                label: 'My Second dataset',
-                backgroundColor: 'rgba(255,99,132,0.2)',
-                pointBackgroundColor: 'rgba(255,99,132,1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: 'rgba(255,99,132,1)',
-                pointHoverBorderColor: 'rgba(255,99,132,1)',
-                data: [28, 48, 40, 19, 96, 27, 100]
-              }
-            ]}
-            options={{
-              aspectRatio: 1.5,
-              tooltips: {
-                enabled: true
-              }
-            }}
-            labels={[
-              'Eating', 'Drinking', 'Sleeping', 'Designing',
-              'Coding', 'Cycling', 'Running'
-            ]}
-          />
-        </CCardBody>
-      </CCard>
-
-      <CCard>
-        <CCardHeader>
-          Radar Chart
-        </CCardHeader>
-        <CCardBody>
-          <CChartRadar
-            datasets={[
-              {
-                label: '2019',
-                backgroundColor: 'rgba(179,181,198,0.2)',
-                borderColor: 'rgba(179,181,198,1)',
-                pointBackgroundColor: 'rgba(179,181,198,1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(179,181,198,1)',
-                tooltipLabelColor: 'rgba(179,181,198,1)',
-                data: [65, 59, 90, 81, 56, 55, 40]
-              },
-              {
-                label: '2020',
-                backgroundColor: 'rgba(255,99,132,0.2)',
-                borderColor: 'rgba(255,99,132,1)',
-                pointBackgroundColor: 'rgba(255,99,132,1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(255,99,132,1)',
-                tooltipLabelColor: 'rgba(255,99,132,1)',
-                data: [28, 48, 40, 19, 96, 27, 100]
-              }
-            ]}
-            options={{
-              aspectRatio: 1.5,
-              tooltips: {
-                enabled: true
-              }
-            }}
-            labels={[
-              'Eating', 'Drinking', 'Sleeping', 'Designing',
-              'Coding', 'Cycling', 'Running'
-            ]}
-          />
-        </CCardBody>
-      </CCard>
-    </CCardGroup>
+    <CRow>
+          <CCol xl="12">
+            <CCard>
+              <CCardHeader style={{ fontSize: 20, textAlign: "center" }}>
+                Cadastro de administradores
+              </CCardHeader>
+              <CCardBody>
+                <div id="accordion">
+                  <form onSubmit={formik.handleSubmit}>
+                    <CCard className="mb-0">
+                      <CCardBody>
+                        <CCol xs="12" sm="12">
+                          <CCard>
+                            <CCardBody>
+                            <CFormGroup row className="my-0">
+                              <CCol xs="8">
+                              <CFormGroup>
+                                <CLabel htmlFor="name">NOME</CLabel>
+                                <CInput
+                                  id="nome"
+                                  name="nome"
+                                  type="text"
+                                  placeholder="Digite o nome completo"
+                                  onChange={formik.handleChange}
+                                  value={formik.values.nome}
+                                />
+                                {formik.errors.nome ? (
+                                  <div>{formik.errors.nome}</div>
+                                ) : null}
+                              </CFormGroup>
+                              </CCol>
+                              <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="status">STATUS</CLabel>
+                                    <CSelect
+                                      custom
+                                      name="status"
+                                      id="status"
+                                      onChange={formik.handleChange}
+                                      value={formik.values.status}
+                                    >
+                                      <option value="o">Selecione</option>
+                                      <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+                                    </CSelect>
+                                    {formik.errors.status ? (
+                                      <div>{formik.errors.status}</div>
+                                    ) : null}
+                                  </CFormGroup>
+                                </CCol>
+                              </CFormGroup>
+                              <CFormGroup row className="my-0">
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="vat">EMAIL</CLabel>
+                                    <CInput
+                                      type="email"
+                                      id="email"
+                                      name="email"
+                                      placeholder="Digite o Email"
+                                      autoComplete="email"
+                                      onChange={formik.handleChange}
+                                      value={formik.values.email}
+                                    />
+                                    {formik.errors.email ? (
+                                      <div>{formik.errors.email}</div>
+                                    ) : null}
+                                  </CFormGroup>
+                                </CCol>
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="vat">RG</CLabel>
+                                    <CInput
+                                      type="number"
+                                      id="rg"
+                                      name="rg"
+                                      placeholder="Digite o RG"
+                                      inputMode="number"
+                                      onChange={formik.handleChange}
+                                      value={formik.values.rg}
+                                    />
+                                    {formik.errors.rg ? (
+                                      <div>{formik.errors.rg}</div>
+                                    ) : null}
+                                  </CFormGroup>
+                                </CCol>
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="cpf">CPF</CLabel>
+                                    <CInput
+                                      type="number"
+                                      id="cpf"
+                                      name="cpf"
+                                      placeholder="Digite o cpf"
+                                      onChange={formik.handleChange}
+                                      value={formik.values.cpf}
+                                    />
+                                    {formik.errors.cpf ? (
+                                      <div>{formik.errors.cpf}</div>
+                                    ) : null}
+                                  </CFormGroup>
+                                </CCol>
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="vat">SENHA</CLabel>
+                                    <CInput
+                                      type="text"
+                                      name="password"
+                                      id="password"
+                                      placeholder="Digite a naturalidade"
+                                      onChange={formik.handleChange}
+                                      value={formik.values.password}
+                                    />
+                                    {formik.errors.password ? (
+                                      <div>{formik.errors.password}</div>
+                                    ) : null}
+                                  </CFormGroup>
+                                </CCol>
+                                                              <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="name">GRÊMIO</CLabel>
+                                    <CSelect
+                                      custom
+                                      name="sede"
+                                      id="sede"
+                                      onChange={formik.handleChange}
+                                      value={formik.values.sede}
+                                    >
+                                      <option value="0">Selecionar</option>
+                                      <option value="BELÉM">BELÉM</option>
+                                      <option value="CASTANHAL">CASTANHAL</option>
+                                      <option value="CAPANEMA">CAPANEMA</option>
+                                      <option value="PARAGOMINAS">PARAGOMINAS</option>
+                                      <option value="MARABÁ">MARABÁ</option>
+                                      <option value="PARAUAPEBAS">PARAUAPEBAS</option>
+                                      <option value="CONCEIÇÃO DO ARAGUAIA">CONCEIÇÃO DO ARAGUAIA</option>
+                                      <option value="XINGUARA">XINGUARA</option>
+                                      <option value="REDENÇÃO">REDENÇÃO</option>
+                                      <option value="SOURE">SOURE</option>
+                                      <option value="TUCURUÍ">TUCURUÍ</option>
+                                      <option value="SANTARÉM">SANTARÉM</option>
+                                      <option value="MONTE ALEGRE">MONTE ALEGRE</option>
+                                      <option value="ORIXIMINÁ">ORIXIMINÁ</option>
+                                      <option value="ALTAMIRA">ALTAMIRA</option>
+                                      <option value="ITAITUBA">ITAITUBA</option>
+                                    </CSelect>
+                                    {formik.errors.sede ? (
+                                      <div>{formik.errors.sede}</div>
+                                    ) : null}
+                                  </CFormGroup>
+                                </CCol>
+                                <CCol xs="4">
+                                <CCol className="mb-6 mb-xl-0 text-center">
+                                  {/* <CLabel htmlFor="text"></CLabel> */}
+                                  {/* <CFormGroup> */}
+                                  <CButton
+                                    type="submit"
+                                    style={{ marginTop: 20, width: 200 }}
+                                    color="primary"
+                                  >
+                                    Salvar formulário
+                                  </CButton>
+                                  {/* </CFormGroup> */}
+                                </CCol>
+                                </CCol>
+                              </CFormGroup>
+                              {/* <CFormGroup row className="my-0"> */}
+                                
+                                {/* </CFormGroup> */}
+                              {/* <CFormGroup row className="my-2">
+                                <CCol className="mb-6 mb-xl-0 text-center">
+                                  
+                                  <CButton
+                                    type="submit"
+                                    style={{ marginTop: 20, width: 200 }}
+                                    color="primary"
+                                  >
+                                    Salvar formulário
+                                  </CButton>
+                                  
+                                </CCol>
+                                </CFormGroup> */}
+                                </CCardBody>
+                                </CCard>
+                            </CCol>    
+                        </CCardBody>        
+                     </CCard>
+                  </form>
+               </div>                 
+            </CCardBody>
+         </CCard>                              
+      </CCol>                        
+    </CRow>                        
   )
 }
 

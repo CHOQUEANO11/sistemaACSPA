@@ -150,7 +150,7 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Cadastrar Usuário',
+    name: 'Cadastrar Administradores',
     to: '/charts',
     icon: 'cil-chart-pie'
   },

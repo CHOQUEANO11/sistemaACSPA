@@ -12,7 +12,7 @@ import {
   CSelect,
 } from "@coreui/react";
 import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import firebase from "../../../services/firebase";
@@ -145,7 +145,7 @@ export default function Breadcrumbs() {
 
   function removeCustom() {
     let ts = dependentList;
-    let ta = ts.splice(ts.indexOf(info.nome), 1);
+    // let ta = ts.splice(ts.indexOf(info.nome), 1);
     if (info !== "") {
       setDependentList(ts);
     } else {
@@ -157,7 +157,6 @@ export default function Breadcrumbs() {
   // useEffect(() => {
 
   // }, [info]);
-  console.log(info);
   const formik = useFormik({
     initialValues: {
       nome: "",
@@ -224,7 +223,6 @@ export default function Breadcrumbs() {
       // setShow(true);
     },
   });
-  console.log(dependentList);
   return (
     <div>
       {show === false ? (

@@ -26,7 +26,7 @@ const TheSidebar = () => {
       show={show}
       onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
     >
-      <CSidebarBrand className="d-md-down-none" to="/">
+      <CSidebarBrand className="d-md-down-none" to="home#/dashboard">
       <img src={'avatars/fotoLogo.png'} style={{width: 80, height: 80, textAlign: 'center', borderRadius: 100}} alt="admin@bootstrapmaster.com" />
         {/* <CIcon
           className="c-sidebar-brand-full"

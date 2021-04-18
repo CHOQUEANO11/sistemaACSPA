@@ -1,20 +1,20 @@
 import React, { lazy } from 'react'
-import {
-  CBadge,
-  CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CProgress,
-  CRow,
-  CCallout
-} from '@coreui/react'
+// import {
+//   CBadge,
+//   CButton,
+//   CCard,
+//   CCardBody,
+//   CCardHeader,
+//   CCol,
+//   CProgress,
+//   CRow,
+//   CCallout
+// } from '@coreui/react'
 import Carousel from '../base/carousels/Carousels.js'
-import CIcon from '@coreui/icons-react'
+// import CIcon from '@coreui/icons-react'
 
 const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
-const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
+// const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 
 const Dashboard = () => {
   return (
@@ -105,16 +105,16 @@ const Dashboard = () => {
         </CCardFooter>
       </CCard> */}
 
-      <WidgetsBrand withCharts/>
+      {/*<WidgetsBrand withCharts/> */}
 
-      <CRow>
+      {/*<CRow>
         <CCol>
           <CCard>
             <CCardHeader>
               Traffic {' & '} Sales
             </CCardHeader>
             <CCardBody>
-              <CRow>
+               <CRow>
                 <CCol xs="12" md="6" xl="6">
 
                   <CRow>
@@ -314,11 +314,11 @@ const Dashboard = () => {
                   </div>
 
                 </CCol>
-              </CRow>
+              </CRow>  
 
               <br />
 
-              <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+              {/* <table className="table table-hover table-outline mb-0 d-none d-sm-table">
                 <thead className="thead-light">
                   <tr>
                     <th className="text-center"><CIcon name="cil-people" /></th>
@@ -547,7 +547,7 @@ const Dashboard = () => {
             </CCardBody>
           </CCard>
         </CCol>
-      </CRow>
+      </CRow>*/}
     </>
   )
 }

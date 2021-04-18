@@ -92,33 +92,15 @@ const validate = (values) => {
   if (!values.sede) {
     errors.sede = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
   }
+  if (!values.password) {
+    errors.password = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
+  }
 
   return errors;
 };
 
 export default function Breadcrumbs() {
-  // const [nome, setNome] = useState("");
-  // const [email, setEmail] = useState('');
-  // const [rg, setRg] = useState('');
-  // const [cpf, setCpf] = useState('');
-  // const [nasc, setNasc] = useState('');
-  // const [natur, setNatur] = useState('');
-  // const [end, setEnd] = useState('');
-  // const [bairro, setBairro] = useState('');
-  // const [munic, setMunic] = useState('');
-  // const [cep, setCep] = useState('');
-  // const [tel, setTel] = useState('');
-  // const [cel, setCel] = useState('');
-  // const [pai, setPai] = useState('');
-  // const [mae, setMae] = useState('');
-  // const [posto, setPosto] = useState('');
-  // const [orgao, setOrgao] = useState('');
-  // const [funcional, setFuncional] = useState('');
-  // const [matricula, setMatricula] = useState('');
-  // const [inclusao, setInclusao] = useState('');
-  // const [cheque, setCheque] = useState('');
-  // const [crg, setCrg] = useState('');
-  // const [status, setStatus] = useState('');
+  
   const [show, setShow] = useState(false);
   // const [dataList, setDataList] = useState({});
   const [fileRGUrl, setFileRGUrl] = useState(null);
@@ -181,13 +163,15 @@ export default function Breadcrumbs() {
       atuacao: "",
       sede: "",
       status: "ATIVO",
+      password: ''
     },
     validate,
     onSubmit: (values) => {
-      if (fileRGUrl !== null && fileCCUrl !== null) {
-        const data = firebase.firestore().collection("users");
-        data.add({
-          nome: values.nome,
+      if (fileRGUrl !== null && fileCCUrl !== null && values) {
+        firebase.auth().onAuthStateChanged((user) =>{
+          if (user) {
+            firebase.firestore().collection("users").doc(user.uid).set({
+              nome: values.nome,
           email: values.email,
           rg: values.rg,
           cpf: values.cpf,
@@ -211,18 +195,35 @@ export default function Breadcrumbs() {
           dependente: dependentList,
           contracheque: fileCCUrl,
           rgMilitar: fileRGUrl,
+          photoUrl: '',
           status: "ATIVO",
-        });
-
+            });
+            datas()
+          }
+        })
         toast.success("Militar foi Inserido com sucesso");
         formik.resetForm();
         setShow(true);
       } else {
         toast.error("Insira a cópia do ContraCheque ou RG Militar ");
       }
-      // setShow(true);
     },
   });
+
+  const datas = () => {
+    const email = formik.values.email
+    const password = formik.values.password
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then((user) => {
+      console.log("DADOS", user)
+      })
+    .catch((error) => {
+    console.log('errado', error);
+    // ..
+    });
+  }
+
+
   return (
     <div>
       {show === false ? (
@@ -846,6 +847,22 @@ export default function Breadcrumbs() {
                                     </CFormGroup>
                                   </CCol>
                                 ) : null}
+                                <CCol xs="4">
+                                  <CFormGroup>
+                                    <CLabel htmlFor="vat">SENHA</CLabel>
+                                    <CInput
+                                      type="text"
+                                      name="password"
+                                      id="password"
+                                      placeholder="Digite a senha"
+                                      onChange={formik.handleChange}
+                                      value={formik.values.password}
+                                    />
+                                    {formik.errors.password ? (
+                                      <div>{formik.errors.password}</div>
+                                    ) : null}
+                                  </CFormGroup>
+                                </CCol>
                               </CFormGroup>
                               <CFormGroup row className="my-2">
                                 <CCol className="mb-6 mb-xl-0 text-center">

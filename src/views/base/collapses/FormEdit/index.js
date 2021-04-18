@@ -472,7 +472,7 @@ function FormEdit({ info }) {
                                       <option value="0">Selecionar</option>
                                       <option value="CORONEL">CORONEL</option>
                                       <option value="TENENTE COTONEL">
-                                        TENENTE COTONEL
+                                        TENENTE CORONEL
                                       </option>
                                       <option value="MAJOR">MAJOR</option>
                                       <option value="CAPITÃO">CAPITÃO</option>
@@ -626,7 +626,21 @@ function FormEdit({ info }) {
                                     >
                                       <option value="0">Selecionar</option>
                                       <option value="BELÉM">BELÉM</option>
+                                      <option value="CASTANHAL">CASTANHAL</option>
+                                      <option value="CAPANEMA">CAPANEMA</option>
+                                      <option value="PARAGOMINAS">PARAGOMINAS</option>
+                                      <option value="MARABÁ">MARABÁ</option>
+                                      <option value="PARAUAPEBAS">PARAUAPEBAS</option>
+                                      <option value="CONCEIÇÃO DO ARAGUAIA">CONCEIÇÃO DO ARAGUAIA</option>
+                                      <option value="XINGUARA">XINGUARA</option>
+                                      <option value="REDENÇÃO">REDENÇÃO</option>
+                                      <option value="SOURE">SOURE</option>
                                       <option value="TUCURUÍ">TUCURUÍ</option>
+                                      <option value="SANTARÉM">SANTARÉM</option>
+                                      <option value="MONTE ALEGRE">MONTE ALEGRE</option>
+                                      <option value="ORIXIMINÁ">ORIXIMINÁ</option>
+                                      <option value="ALTAMIRA">ALTAMIRA</option>
+                                      <option value="ITAITUBA">ITAITUBA</option>
                                     </CSelect>
                                     {formik.errors.sede ? (
                                       <div>{formik.errors.sede}</div>

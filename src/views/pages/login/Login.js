@@ -32,6 +32,7 @@ const Login = () => {
     // eslint-disable-next-line no-unused-expressions
     history.push('/home')
     toast.success(`Seja bem vindo(@), ${email}`);
+    localStorage.setItem('email', email)
   })
   .catch((error) => {
     toast.error("Desculpe, você não é um ADMINISTRADOR!");

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import {
   CButton,
   CCard,
@@ -55,7 +56,8 @@ export default function Cards() {
       setTimeout(() => {
         teste();
       }, 1000);
-    } catch {
+    } catch (err) {
+      console.log('ERROR', err);
       toast.error("Não foi possível efetuar desligamento");
       toggle();
     }

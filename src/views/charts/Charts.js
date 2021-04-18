@@ -74,19 +74,21 @@ const Charts = () => {
     validate,
     onSubmit: (values) =>  {
       if (values) {
-        const data =  firebase.firestore().collection("admin");
-        data.add({
-          nome: values.nome,
-          email: values.email,
-          rg: values.rg,
-          cpf: values.cpf,
-          sede: values.sede,
-          // password: values.password,
-          status: values.status,
-        });
-        datas()
-
-        toast.success("Militar foi Inserido com sucesso");
+        firebase.auth().onAuthStateChanged((user) =>{
+          if (user) {
+            firebase.firestore().collection("admin").doc(user.uid).set({
+              nome: values.nome,
+              // email: values.email,
+              rg: values.rg,
+              cpf: values.cpf,
+              sede: values.sede,
+              // password: values.password,
+              status: values.status,
+            })
+            datas()
+          }
+        })
+        toast.success("ADMINISTRADOR Inserido com sucesso");
         formik.resetForm();
         // setShow(true);
       } else {
@@ -102,8 +104,6 @@ const Charts = () => {
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((user) => {
       console.log("DADOS", user)
-    // Signed in
-    // ...
       })
     .catch((error) => {
     console.log('errado', error);
@@ -220,7 +220,7 @@ const Charts = () => {
                                       type="text"
                                       name="password"
                                       id="password"
-                                      placeholder="Digite a naturalidade"
+                                      placeholder="Digite a senha"
                                       onChange={formik.handleChange}
                                       value={formik.values.password}
                                     />
@@ -229,7 +229,7 @@ const Charts = () => {
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>
-                                                              <CCol xs="4">
+                                  <CCol xs="4">
                                   <CFormGroup>
                                     <CLabel htmlFor="name">GRÊMIO</CLabel>
                                     <CSelect

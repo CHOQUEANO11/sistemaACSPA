@@ -76,7 +76,7 @@ const Charts = () => {
       if (values) {
         firebase.auth().onAuthStateChanged((user) =>{
           if (user) {
-            firebase.firestore().collection("admin").doc(user.uid).set({
+            firebase.firestore().collection("users").doc(user.uid).set({
               nome: values.nome,
               // email: values.email,
               rg: values.rg,

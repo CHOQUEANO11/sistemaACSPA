@@ -46,7 +46,7 @@ const validate = (values) => {
     errors.password = <p style={{ color: "red" }}>A senha deve conter 6 ou mais caracteres!</p>;
   }
 
-  if (!values.status) {
+  if (!values.categoria) {
     errors.status = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
   }
 
@@ -69,7 +69,7 @@ const Charts = () => {
       cpf: "",
       sede: "",
       password: "",
-      status: ""
+      categoria: ""
     },
     validate,
     onSubmit: (values) =>  {
@@ -83,7 +83,7 @@ const Charts = () => {
               cpf: values.cpf,
               sede: values.sede,
               // password: values.password,
-              status: values.status,
+              categoria: values.categoria,
             })
             datas()
           }
@@ -145,19 +145,19 @@ const Charts = () => {
                               </CCol>
                               <CCol xs="4">
                                   <CFormGroup>
-                                    <CLabel htmlFor="status">STATUS</CLabel>
+                                    <CLabel htmlFor="categoria">CATEGORIA</CLabel>
                                     <CSelect
                                       custom
-                                      name="status"
-                                      id="status"
+                                      name="categoria"
+                                      id="categoria"
                                       onChange={formik.handleChange}
-                                      value={formik.values.status}
+                                      value={formik.values.categoria}
                                     >
                                       <option value="o">Selecione</option>
                                       <option value="ADMINISTRADOR">ADMINISTRADOR</option>
                                     </CSelect>
-                                    {formik.errors.status ? (
-                                      <div>{formik.errors.status}</div>
+                                    {formik.errors.categoria ? (
+                                      <div>{formik.errors.categoria}</div>
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>

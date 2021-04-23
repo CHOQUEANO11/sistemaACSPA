@@ -92,6 +92,9 @@ const validate = (values) => {
   if (!values.sede) {
     errors.sede = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
   }
+  if (!values.categoria) {
+    errors.sede = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
+  }
   if (!values.password) {
     errors.password = <p style={{ color: "red" }}>Esse Campo é Obrigátorio</p>;
   }
@@ -161,6 +164,7 @@ export default function Breadcrumbs() {
       matricula: "",
       inclusao: "",
       atuacao: "",
+      categoria: "",
       sede: "",
       status: "ATIVO",
       password: ''
@@ -188,6 +192,7 @@ export default function Breadcrumbs() {
           grad: values.grad,
           orgao: values.orgao,
           situacao: values.situacao,
+          categoria: values.categoria,
           matricula: values.matricula,
           inclusao: values.inclusao,
           atuacao: values.atuacao,
@@ -571,7 +576,7 @@ export default function Breadcrumbs() {
                                     >
                                       <option value="0">Selecionar</option>
                                       <option value="ATIVA">ATIVA</option>
-                                      <option value="RESERVA REMUNERADA">
+                                      <option value="RESERVA">
                                         RESERVA REMUNERADA
                                       </option>
                                     </CSelect>
@@ -601,7 +606,7 @@ export default function Breadcrumbs() {
                                 </CCol>
                               </CFormGroup>
                               <CFormGroup row className="my-0">
-                                <CCol xs="4">
+                                <CCol xs="3">
                                   <CFormGroup>
                                     <CLabel htmlFor="date">
                                       DATA DA INCLUSÃO
@@ -619,7 +624,25 @@ export default function Breadcrumbs() {
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>
-                                <CCol xs="4">
+                                <CCol xs="3">
+                                <CFormGroup>
+                                    <CLabel htmlFor="name">CATEGORIA</CLabel>
+                                    <CSelect
+                                      custom
+                                      name="categoria"
+                                      id="categoria"
+                                      onChange={formik.handleChange}
+                                      value={formik.values.categoria}
+                                    >
+                                      <option value="0">Selecionar</option>
+                                      <option value="ASSOCIADO">ASSOCIADO</option>
+                                    </CSelect>
+                                    {formik.errors.categoria ? (
+                                      <div>{formik.errors.categoria}</div>
+                                    ) : null}
+                                  </CFormGroup>
+                                </CCol>
+                                <CCol xs="3">
                                   <CFormGroup>
                                     <CLabel htmlFor="date">
                                       LOCAL ATUAL DE ATUAÇÃO
@@ -637,7 +660,7 @@ export default function Breadcrumbs() {
                                     ) : null}
                                   </CFormGroup>
                                 </CCol>
-                                <CCol xs="4">
+                                <CCol xs="3">
                                   <CFormGroup>
                                     <CLabel htmlFor="name">GRÊMIO</CLabel>
                                     <CSelect
